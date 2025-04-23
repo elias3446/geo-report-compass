@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -7,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Edit, Plus, Trash2 } from "lucide-react";
+import { EditIcon, Trash2Icon, MoreHorizontalIcon, Eye } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -130,10 +130,14 @@ const RoleManageTable: React.FC = () => {
 
   return (
     <div>
-      <div className="flex items-center justify-end mb-4">
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <h2 className="text-2xl font-bold">Gestión de Roles</h2>
+          <p className="text-gray-500">Administra los roles y permisos del sistema</p>
+        </div>
         <Button 
-          onClick={() => setIsDialogOpen(true)}
           className="flex items-center"
+          onClick={() => setIsDialogOpen(true)}
         >
           <Plus className="mr-2 h-4 w-4" />
           Nuevo Rol
@@ -173,6 +177,7 @@ const RoleManageTable: React.FC = () => {
                   </div>
                 </TableCell>
                 <TableCell className="text-right">
+                <div className="flex justify-end gap-2">
                   <Button
                     variant="ghost"
                     size="icon"
@@ -184,11 +189,13 @@ const RoleManageTable: React.FC = () => {
                   <Button
                     variant="ghost"
                     size="icon"
+                    className="text-destructive"
                     onClick={() => handleDelete(role.id)}
                     disabled={role.id === "admin"}
                   >
-                    <Trash2 className="h-4 w-4" />
+                    <Trash2Icon className="h-4 w-4" />
                   </Button>
+                </div>
                 </TableCell>
               </TableRow>
             ))}

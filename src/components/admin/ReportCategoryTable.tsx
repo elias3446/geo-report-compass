@@ -10,19 +10,17 @@ import {
 } from "@/components/ui/table";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
-import { EditIcon, TrashIcon } from "lucide-react";
+import { EditIcon, Trash2Icon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Category } from '@/types/admin';
 
-interface Category {
-  id: string;
-  name: string;
-  description: string;
-  reports: number;
+interface CategoryWithReports extends Omit<Category, 'active' | 'createdAt'> {
   status: 'active' | 'inactive';
+  reports: number;
 }
 
 interface ReportCategoryTableProps {
-  categories: Category[];
+  categories: CategoryWithReports[];
   onEdit: (category: Category) => void;
   onDelete: (categoryId: string) => void;
 }
@@ -63,7 +61,11 @@ const ReportCategoryTable: React.FC<ReportCategoryTableProps> = ({
                     <Button
                       variant="ghost"
                       size="icon"
-                      onClick={() => onEdit(category)}
+                      onClick={() => onEdit({
+                        ...category,
+                        active: category.status === 'active',
+                        createdAt: new Date()
+                      })}
                     >
                       <EditIcon className="h-4 w-4" />
                     </Button>
@@ -73,7 +75,7 @@ const ReportCategoryTable: React.FC<ReportCategoryTableProps> = ({
                       className="text-destructive"
                       onClick={() => onDelete(category.id)}
                     >
-                      <TrashIcon className="h-4 w-4" />
+                      <Trash2Icon className="h-4 w-4" />
                     </Button>
                   </div>
                 </TableCell>
@@ -87,4 +89,3 @@ const ReportCategoryTable: React.FC<ReportCategoryTableProps> = ({
 };
 
 export default ReportCategoryTable;
-

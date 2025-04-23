@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -75,10 +74,14 @@ const StatusManageTable: React.FC = () => {
 
   return (
     <div>
-      <div className="flex items-center justify-end mb-4">
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <h2 className="text-2xl font-bold">Estados de Reporte</h2>
+          <p className="text-gray-500">Administra los estados posibles de los reportes en el sistema</p>
+        </div>
         <Button 
-          onClick={() => setIsDialogOpen(true)}
           className="flex items-center"
+          onClick={() => setIsDialogOpen(true)}
         >
           <Plus className="mr-2 h-4 w-4" />
           Nuevo Estado
@@ -115,6 +118,7 @@ const StatusManageTable: React.FC = () => {
                   <Button
                     variant="ghost"
                     size="icon"
+                    className="text-destructive"
                     onClick={() => handleDelete(status.id)}
                     disabled={status.id === "draft" || status.id === "submitted"}
                   >

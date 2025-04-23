@@ -25,7 +25,6 @@ import { getReports } from '@/services/reportService';
 import { useUsers } from '@/contexts/UserContext';
 
 const Admin = () => {
-  // State for users tab
   const [searchQuery, setSearchQuery] = useState('');
   const [activeUserFilter, setActiveUserFilter] = useState<string>('all');
   const { 
@@ -37,15 +36,12 @@ const Admin = () => {
   const [userFormOpen, setUserFormOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<User | undefined>(undefined);
   
-  // State for categories tab
   const [categories, setCategories] = useState<Category[]>([]);
   const [categoryFormOpen, setCategoryFormOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState<Category | undefined>(undefined);
   
-  // State for settings tab
   const [settings, setSettings] = useState<SystemSetting[]>([]);
   
-  // Reports
   const [reports, setReports] = useState<any[]>([]);
   const [reportCounts, setReportCounts] = useState({
     total: 0,
@@ -54,16 +50,13 @@ const Admin = () => {
     resolved: 0
   });
 
-  // Cargar datos iniciales y actualizar contadores
   const loadReportsData = () => {
     const allReports = getReports();
     setReports(allReports);
     
-    // Calcular contadores basados en los datos actuales
     updateReportCounts(allReports);
   };
 
-  // Función para actualizar los contadores de reportes
   const updateReportCounts = (reportsList: any[]) => {
     setReportCounts({
       total: reportsList.length,
@@ -73,7 +66,6 @@ const Admin = () => {
     });
   };
 
-  // Load initial data
   useEffect(() => {
     const allUsers = getFilteredUsers('all');
     setFilteredUsers(allUsers);
@@ -83,7 +75,6 @@ const Admin = () => {
     setSettings(getSettings());
   }, [getFilteredUsers]);
 
-  // Filter users based on search and role filter
   useEffect(() => {
     let filtered = getFilteredUsers(activeUserFilter);
     
@@ -98,7 +89,6 @@ const Admin = () => {
     setFilteredUsers(filtered);
   }, [searchQuery, activeUserFilter, getFilteredUsers, users]);
 
-  // User management handlers
   const handleCreateUser = (userData: Omit<User, 'id' | 'createdAt' | 'lastLogin'>) => {
     try {
       const newUser = createUser(userData);
@@ -155,7 +145,6 @@ const Admin = () => {
     deleteUser(userId);
   };
 
-  // Category management handlers
   const handleCreateCategory = (categoryData: Omit<Category, 'id' | 'createdAt'>) => {
     try {
       const newCategory = createCategory(categoryData);
@@ -229,7 +218,6 @@ const Admin = () => {
     }
   };
 
-  // Settings handlers
   const handleSaveSettings = (updatedSettings: SystemSetting[]) => {
     updatedSettings.forEach(setting => {
       updateSetting(setting.id, setting.value);
@@ -237,10 +225,8 @@ const Admin = () => {
     setSettings([...updatedSettings]);
   };
 
-  // Report handlers
   const handleUpdateReportStatus = (reportId: string, status: string) => {
     try {
-      // Update the local state for immediate UI feedback
       const updatedReports = reports.map(report => {
         if (report.id.toString() === reportId) {
           return { ...report, status };
@@ -267,7 +253,6 @@ const Admin = () => {
 
   const handleAssignReport = (reportId: string, userId: string) => {
     try {
-      // Update the local state for immediate UI feedback
       const updatedReports = reports.map(report => {
         if (report.id.toString() === reportId) {
           return { ...report, assignedTo: userId };
@@ -291,13 +276,10 @@ const Admin = () => {
     }
   };
 
-  // Manejar la eliminación de un reporte
   const handleReportDeleted = (reportId: number) => {
-    // Filtrar el reporte eliminado de la lista local
     const updatedReports = reports.filter(report => report.id !== reportId);
     setReports(updatedReports);
     
-    // Actualizar los contadores
     updateReportCounts(updatedReports);
 
     console.log("Reporte eliminado y contadores actualizados:", {
@@ -309,118 +291,42 @@ const Admin = () => {
   return (
     <AppLayout>
       <div className="mb-6">
-        <h1 className="text-3xl font-bold tracking-tight">Administración</h1>
+        <h1 className="text-3xl font-bold tracking-tight break-words">Administración</h1>
         <p className="text-muted-foreground mt-1">
           Gestión de usuarios, reportes y configuración del sistema
         </p>
       </div>
       
-      <Tabs defaultValue="users" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="users">Usuarios</TabsTrigger>
-          <TabsTrigger value="reports">Reportes</TabsTrigger>
-          <TabsTrigger value="categories">Categorías</TabsTrigger>
-          <TabsTrigger value="roles">Roles</TabsTrigger>
-          <TabsTrigger value="states">Estados</TabsTrigger>
-          <TabsTrigger value="settings">Configuración</TabsTrigger>
-        </TabsList>
+      <Tabs defaultValue="users" className="space-y-6">
+        <div className="w-full mb-4">
+          <TabsList className="w-full flex-wrap justify-start gap-2 h-auto p-2">
+            <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-6 w-full gap-2">
+              <TabsTrigger value="users" className="w-full">Usuarios</TabsTrigger>
+              <TabsTrigger value="reports" className="w-full">Reportes</TabsTrigger>
+              <TabsTrigger value="categories" className="w-full">Categorías</TabsTrigger>
+              <TabsTrigger value="roles" className="w-full">Roles</TabsTrigger>
+              <TabsTrigger value="states" className="w-full">Estados</TabsTrigger>
+              <TabsTrigger value="settings" className="w-full">Configuración</TabsTrigger>
+            </div>
+          </TabsList>
+        </div>
         
-        <TabsContent value="users" className="space-y-4">
-          <div className="border rounded-lg p-6 bg-white">
-            <div className="flex justify-between items-center mb-6">
-              <div>
-                <h2 className="text-2xl font-bold">Gestión de Usuarios</h2>
-                <p className="text-gray-500">Administra los usuarios del sistema</p>
-              </div>
-              <Button 
-                className="flex items-center"
-                onClick={() => {
-                  setEditingUser(undefined);
-                  setUserFormOpen(true);
-                }}
-              >
-                <Users className="mr-2 h-4 w-4" />
-                Nuevo Usuario
-              </Button>
-            </div>
-            
-            <div className="relative mb-6">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-              <Input 
-                className="pl-10" 
-                placeholder="Buscar usuarios..." 
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-            
-            <div className="grid grid-cols-4 gap-2 mb-6">
-              <Button 
-                variant={activeUserFilter === 'all' ? 'default' : 'outline'} 
-                className="flex items-center justify-center"
-                onClick={() => setActiveUserFilter('all')}
-              >
-                <Users className="mr-2 h-4 w-4" />
-                Todos ({totalUsers})
-              </Button>
-              <Button 
-                variant={activeUserFilter === 'admin' ? 'default' : 'outline'} 
-                className="flex items-center justify-center"
-                onClick={() => setActiveUserFilter('admin')}
-              >
-                <Shield className="mr-2 h-4 w-4" />
-                Administradores ({adminUsers})
-              </Button>
-              <Button 
-                variant={activeUserFilter === 'supervisor' ? 'default' : 'outline'} 
-                className="flex items-center justify-center"
-                onClick={() => setActiveUserFilter('supervisor')}
-              >
-                <UserCog className="mr-2 h-4 w-4" />
-                Supervisores ({supervisorUsers})
-              </Button>
-              <Button 
-                variant={activeUserFilter === 'mobile' ? 'default' : 'outline'} 
-                className="flex items-center justify-center"
-                onClick={() => setActiveUserFilter('mobile')}
-              >
-                <Smartphone className="mr-2 h-4 w-4" />
-                Usuarios Móviles ({mobileUsers})
-              </Button>
-            </div>
-            
-            <UserTable 
-              onEdit={handleEditUser}
-              filteredUsers={filteredUsers}
-            />
-
-            {userFormOpen && (
-              <UserForm 
-                open={userFormOpen}
-                onClose={closeUserForm}
-                onSubmit={editingUser ? handleUpdateUser : handleCreateUser}
-                initialData={editingUser}
-              />
-            )}
-          </div>
-        </TabsContent>
-        
-        <TabsContent value="reports" className="space-y-4">
+        <TabsContent value="reports" className="space-y-6 min-h-[600px]">
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
+            <CardHeader className="flex flex-col space-y-4">
               <div>
                 <CardTitle>Gestión de Reportes</CardTitle>
                 <CardDescription>
                   Administra y supervisa todos los reportes del sistema
                 </CardDescription>
               </div>
-              <Button>
+              <Button className="w-full sm:w-auto">
                 <FileText className="mr-2 h-4 w-4" />
                 Exportar Reportes
               </Button>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-4 gap-4 mb-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                 <Card>
                   <CardContent className="pt-6">
                     <div className="text-2xl font-bold">{reportCounts.total}</div>
@@ -450,24 +356,109 @@ const Admin = () => {
                 </Card>
               </div>
               
-              <ReportsTable 
-                onUpdateStatus={handleUpdateReportStatus}
-                onAssignReport={handleAssignReport}
-                onReportDeleted={handleReportDeleted}
-                currentUser={{ id: 'admin', name: 'Administrador' }}
-              />
+              <div className="w-full overflow-x-auto">
+                <ReportsTable 
+                  onUpdateStatus={handleUpdateReportStatus}
+                  onAssignReport={handleAssignReport}
+                  onReportDeleted={handleReportDeleted}
+                  currentUser={{ id: 'admin', name: 'Administrador' }}
+                />
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
         
-        <TabsContent value="categories" className="space-y-4">
+        <TabsContent value="users" className="space-y-6 min-h-[600px]">
           <div className="border rounded-lg p-6 bg-white">
-            <div className="flex justify-between items-center mb-6">
+            <div className="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center mb-6">
+              <div>
+                <h2 className="text-2xl font-bold">Gestión de Usuarios</h2>
+                <p className="text-gray-500">Administra los usuarios del sistema</p>
+              </div>
+              <Button 
+                className="w-full sm:w-auto flex items-center justify-center"
+                onClick={() => {
+                  setEditingUser(undefined);
+                  setUserFormOpen(true);
+                }}
+              >
+                <Users className="mr-2 h-4 w-4" />
+                Nuevo Usuario
+              </Button>
+            </div>
+            
+            <div className="relative mb-6">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+              <Input 
+                className="pl-10" 
+                placeholder="Buscar usuarios..." 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 mb-6">
+              <Button 
+                variant={activeUserFilter === 'all' ? 'default' : 'outline'} 
+                className="w-full flex items-center justify-center"
+                onClick={() => setActiveUserFilter('all')}
+              >
+                <Users className="mr-2 h-4 w-4" />
+                Todos ({totalUsers})
+              </Button>
+              <Button 
+                variant={activeUserFilter === 'admin' ? 'default' : 'outline'} 
+                className="w-full flex items-center justify-center"
+                onClick={() => setActiveUserFilter('admin')}
+              >
+                <Shield className="mr-2 h-4 w-4" />
+                Administradores ({adminUsers})
+              </Button>
+              <Button 
+                variant={activeUserFilter === 'supervisor' ? 'default' : 'outline'} 
+                className="w-full flex items-center justify-center"
+                onClick={() => setActiveUserFilter('supervisor')}
+              >
+                <UserCog className="mr-2 h-4 w-4" />
+                Supervisores ({supervisorUsers})
+              </Button>
+              <Button 
+                variant={activeUserFilter === 'mobile' ? 'default' : 'outline'} 
+                className="w-full flex items-center justify-center"
+                onClick={() => setActiveUserFilter('mobile')}
+              >
+                <Smartphone className="mr-2 h-4 w-4" />
+                Usuarios Móviles ({mobileUsers})
+              </Button>
+            </div>
+            
+            <div className="overflow-x-auto">
+              <UserTable 
+                onEdit={handleEditUser}
+                filteredUsers={filteredUsers}
+              />
+            </div>
+
+            {userFormOpen && (
+              <UserForm 
+                open={userFormOpen}
+                onClose={closeUserForm}
+                onSubmit={editingUser ? handleUpdateUser : handleCreateUser}
+                initialData={editingUser}
+              />
+            )}
+          </div>
+        </TabsContent>
+        
+        <TabsContent value="categories" className="space-y-6 min-h-[600px]">
+          <div className="border rounded-lg p-6 bg-white">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
               <div>
                 <h2 className="text-2xl font-bold">Gestión de Categorías</h2>
                 <p className="text-gray-500">Administra las categorías del sistema</p>
               </div>
               <Button 
+                className="w-full sm:w-auto"
                 onClick={() => {
                   setEditingCategory(undefined);
                   setCategoryFormOpen(true);
@@ -478,15 +469,17 @@ const Admin = () => {
               </Button>
             </div>
             
-            <ReportCategoryTable 
-              categories={categories.map(cat => ({
-                ...cat,
-                reports: Math.floor(Math.random() * 20)
-              }))}
-              onEdit={handleEditCategory}
-              onDelete={handleDeleteCategory}
-              onToggleActive={handleToggleCategoryActive}
-            />
+            <div className="overflow-x-auto">
+              <ReportCategoryTable 
+                categories={categories.map(cat => ({
+                  ...cat,
+                  status: cat.active ? 'active' : 'inactive',
+                  reports: Math.floor(Math.random() * 20)
+                }))}
+                onEdit={handleEditCategory}
+                onDelete={handleDeleteCategory}
+              />
+            </div>
           </div>
 
           {categoryFormOpen && (
@@ -499,39 +492,27 @@ const Admin = () => {
           )}
         </TabsContent>
         
-        <TabsContent value="roles" className="space-y-4">
+        <TabsContent value="roles" className="space-y-6 min-h-[600px]">
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
-              <div>
-                <CardTitle>Gestión de Roles</CardTitle>
-                <CardDescription>
-                  Administra los roles y permisos del sistema
-                </CardDescription>
-              </div>
+            <CardHeader>
+              <CardContent className="p-0 pt-6">
+                <RoleManageTable />
+              </CardContent>
             </CardHeader>
-            <CardContent>
-              <RoleManageTable />
-            </CardContent>
           </Card>
         </TabsContent>
         
-        <TabsContent value="states" className="space-y-4">
+        <TabsContent value="states" className="space-y-6 min-h-[600px]">
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
-              <div>
-                <CardTitle>Estados de Reporte</CardTitle>
-                <CardDescription>
-                  Administra los estados posibles de los reportes en el sistema
-                </CardDescription>
-              </div>
+            <CardHeader>
+              <CardContent className="p-0 pt-6">
+                <StatusManageTable />
+              </CardContent>
             </CardHeader>
-            <CardContent>
-              <StatusManageTable />
-            </CardContent>
           </Card>
         </TabsContent>
         
-        <TabsContent value="settings" className="space-y-4">
+        <TabsContent value="settings" className="space-y-6 min-h-[600px]">
           <SettingsForm 
             settings={settings}
             onSave={handleSaveSettings}

@@ -65,7 +65,7 @@ const MapView: React.FC<MapViewProps> = ({
   const defaultZoom = 12;
 
   return (
-    <div style={{ height, width: '100%' }}>
+    <div style={{ height, width: '100%' }} className="relative z-0">
       <MapContainer 
         center={defaultCenter}
         zoom={defaultZoom}
