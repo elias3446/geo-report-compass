@@ -105,14 +105,12 @@ const ReportList = () => {
       });
     }
     
-    // Apply specific filter if both filter type and value are selected
     if (selectedFilter && filterValue) {
       filteredReports = filteredReports.filter(report => {
         const value = report[selectedFilter as keyof Report];
         if (typeof value === 'string') {
           return value.toLowerCase().includes(filterValue.toLowerCase());
         } else if (selectedFilter === 'createdAt') {
-          // Fix TypeScript error by properly type checking
           const dateValue = value as unknown as string;
           const reportDateStr = new Date(dateValue).toLocaleDateString('es-MX');
           return reportDateStr.includes(filterValue);
@@ -190,7 +188,6 @@ const ReportList = () => {
     toast("All filters cleared");
   };
 
-  // Get unique filter values for the selected filter type
   const getFilterOptions = () => {
     if (!selectedFilter) return [];
     
@@ -201,7 +198,6 @@ const ReportList = () => {
       if (typeof value === 'string') {
         uniqueValues.add(value);
       } else if (selectedFilter === 'createdAt') {
-        // Fix TypeScript error by properly type checking
         const dateValue = value as unknown as string;
         const dateStr = new Date(dateValue).toLocaleDateString('es-MX');
         uniqueValues.add(dateStr);
@@ -253,7 +249,6 @@ const ReportList = () => {
     }).format(date);
   };
 
-  // Export reports to CSV
   const handleExportReports = () => {
     try {
       if (reports.length === 0) {
@@ -330,16 +325,16 @@ const ReportList = () => {
               Manage and monitor all reported issues
             </CardDescription>
           </div>
-          <div className="flex space-x-2">
+          <div className="flex flex-wrap gap-2">
             <Link to="/new-report">
-              <Button className="flex items-center">
+              <Button className="flex items-center w-full sm:w-auto">
                 <PlusCircle className="h-4 w-4 mr-2" />
                 New Report
               </Button>
             </Link>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="flex items-center">
+                <Button variant="outline" className="flex items-center w-full sm:w-auto">
                   <Filter className="h-4 w-4 mr-2" />
                   Filter Status
                   <ChevronDown className="h-4 w-4 ml-2" />

@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import AppLayout from '@/components/layout/AppLayout';
 import MapView from '@/components/map/MapView';
@@ -71,21 +72,23 @@ const MapPage = () => {
             <CardDescription>
               Visualización geográfica de todos los reportes
             </CardDescription>
-            <Tabs 
-              defaultValue="all" 
-              className="mt-2"
-              onValueChange={setActiveFilter}
-            >
-              <TabsList className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
-                <TabsTrigger value="all">Todos</TabsTrigger>
-                <TabsTrigger value="open">Abiertos</TabsTrigger>
-                <TabsTrigger value="progress">En Progreso</TabsTrigger>
-                <TabsTrigger value="resolved">Resueltos</TabsTrigger>
-              </TabsList>
-            </Tabs>
+            <div className="relative z-10">
+              <Tabs 
+                defaultValue="all" 
+                className="mt-2"
+                onValueChange={setActiveFilter}
+              >
+                <TabsList className="w-full flex flex-wrap justify-start gap-2 h-auto p-2">
+                  <TabsTrigger value="all" className="flex-1 min-w-[120px]">Todos</TabsTrigger>
+                  <TabsTrigger value="open" className="flex-1 min-w-[120px]">Abiertos</TabsTrigger>
+                  <TabsTrigger value="progress" className="flex-1 min-w-[120px]">En Progreso</TabsTrigger>
+                  <TabsTrigger value="resolved" className="flex-1 min-w-[120px]">Resueltos</TabsTrigger>
+                </TabsList>
+              </Tabs>
+            </div>
           </CardHeader>
-          <CardContent className="p-0">
-            <div className="h-[400px]">
+          <CardContent className="p-0 relative">
+            <div className="h-[400px] mt-4">
               <TimeFilterProvider>
                 <MapView 
                   height="100%" 
