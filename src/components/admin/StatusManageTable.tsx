@@ -19,13 +19,29 @@ interface Status {
   id: string;
   name: string;
   description: string;
+  color: string;
 }
 
 const StatusManageTable: React.FC = () => {
   const statuses = [
-    { id: "Open", name: "Open", description: "Report is created and pending attention" },
-    { id: "In Progress", name: "In Progress", description: "Report is currently being worked on" },
-    { id: "Resolved", name: "Resolved", description: "The reported issue has been resolved" }
+    { 
+      id: "Open", 
+      name: "Open", 
+      description: "Report is created and pending attention",
+      color: "bg-yellow-100 text-yellow-800 border-yellow-200"
+    },
+    { 
+      id: "In Progress", 
+      name: "In Progress", 
+      description: "Report is currently being worked on",
+      color: "bg-blue-100 text-blue-800 border-blue-200"
+    },
+    { 
+      id: "Resolved", 
+      name: "Resolved", 
+      description: "The reported issue has been resolved",
+      color: "bg-green-100 text-green-800 border-green-200"
+    }
   ];
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -39,7 +55,8 @@ const StatusManageTable: React.FC = () => {
     } else {
       const newStatus: Status = {
         id: `status_${uuidv4().split('-')[0]}`,
-        ...formData
+        ...formData,
+        color: "bg-yellow-100 text-yellow-800 border-yellow-200"
       };
       // ... existing code ...
     }

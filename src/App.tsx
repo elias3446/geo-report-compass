@@ -7,6 +7,7 @@ import { useState } from "react";
 import { ReportProvider } from "./contexts/ReportContext";
 import { TimeFilterProvider } from "./context/TimeFilterContext";
 import { UserProvider } from "./contexts/UserContext";
+import { StatusProvider } from "./contexts/StatusContext";
 import Index from "./pages/Index";
 import Reports from "./pages/Reports";
 import NewReport from "./pages/NewReport";
@@ -32,23 +33,25 @@ const App = () => {
         <BrowserRouter>
           <UserProvider>
             <ReportProvider>
-              <TimeFilterProvider>
-                <Routes>
-                  <Route path="/" element={<Index />} />
-                  <Route path="/reports" element={<Reports />} />
-                  <Route path="/reports/:id" element={<ReportDetail />} />
-                  <Route path="/reports/:id/edit" element={<EditReport />} />
-                  <Route path="/new-report" element={<NewReport />} />
-                  <Route path="/map" element={<MapPage />} />
-                  <Route path="/admin" element={<Admin />} />
-                  <Route path="/help" element={<Help />} />
-                  <Route path="/settings" element={<SettingsPage />} />
-                  <Route path="/dashboard" element={<Dashboard />} />
-                  <Route path="/users/:id" element={<UserDetail />} />
-                  <Route path="/categories/:id" element={<CategoryDetail />} />
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </TimeFilterProvider>
+              <StatusProvider>
+                <TimeFilterProvider>
+                  <Routes>
+                    <Route path="/" element={<Index />} />
+                    <Route path="/reports" element={<Reports />} />
+                    <Route path="/reports/:id" element={<ReportDetail />} />
+                    <Route path="/reports/:id/edit" element={<EditReport />} />
+                    <Route path="/new-report" element={<NewReport />} />
+                    <Route path="/map" element={<MapPage />} />
+                    <Route path="/admin" element={<Admin />} />
+                    <Route path="/help" element={<Help />} />
+                    <Route path="/settings" element={<SettingsPage />} />
+                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/users/:id" element={<UserDetail />} />
+                    <Route path="/categories/:id" element={<CategoryDetail />} />
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </TimeFilterProvider>
+              </StatusProvider>
             </ReportProvider>
           </UserProvider>
         </BrowserRouter>

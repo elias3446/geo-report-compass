@@ -19,6 +19,7 @@ import { format } from 'date-fns';
 import { Calendar as CalendarIcon, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { useStatuses } from '@/contexts/StatusContext';
 
 export interface FormData {
   title: string;
@@ -29,7 +30,7 @@ export interface FormData {
     name: string;
   };
   date: string;
-  status: 'draft' | 'submitted' | 'approved' | 'rejected';
+  status: string;
   category: string;
   tags: string[];
 }
@@ -59,6 +60,8 @@ const ReportFormFields: React.FC<ReportFormFieldsProps> = ({
   categories,
   formatDisplayDate
 }) => {
+  const { statuses } = useStatuses();
+
   return (
     <div className="space-y-4">
       <div>
@@ -189,9 +192,11 @@ const ReportFormFields: React.FC<ReportFormFieldsProps> = ({
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem value="Open">Open</SelectItem>
-                <SelectItem value="In Progress">In Progress</SelectItem>
-                <SelectItem value="Resolved">Resolved</SelectItem>
+                {statuses.map(status => (
+                  <SelectItem key={status.id} value={status.id}>
+                    {status.name}
+                  </SelectItem>
+                ))}
               </SelectGroup>
             </SelectContent>
           </Select>

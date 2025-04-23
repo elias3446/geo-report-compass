@@ -5,6 +5,7 @@ import { getReports, updateReport, deleteReport } from '@/services/reportService
 import { getUserById } from '@/services/userService';
 import { getUsers } from '@/services/adminService';
 import { useUsers } from '@/contexts/UserContext';
+import { useStatuses } from '@/contexts/StatusContext';
 import { 
   Table, 
   TableHeader, 
@@ -64,6 +65,7 @@ const ReportsTable: React.FC<ReportsTableProps> = ({
   const [reports, setReports] = useState(getReports());
   const { users } = useUsers();
   const [activeUsers, setActiveUsers] = useState<User[]>([]);
+  const { statuses, getStatusColor } = useStatuses();
   
   // Load active users from UserContext
   useEffect(() => {
@@ -246,13 +248,13 @@ const ReportsTable: React.FC<ReportsTableProps> = ({
                     defaultValue={report.status}
                     onValueChange={(value) => handleUpdateStatus(report.id, value)}
                   >
-                    <SelectTrigger className={`w-[140px] ${statusColors[report.status as keyof typeof statusColors] || ''}`}>
+                    <SelectTrigger className={`w-[140px] ${getStatusColor(report.status)}`}>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      {Object.entries(statusLabels).map(([value, label]) => (
-                        <SelectItem key={value} value={value}>
-                          {label}
+                      {statuses.map((status) => (
+                        <SelectItem key={status.id} value={status.id}>
+                          {status.name}
                         </SelectItem>
                       ))}
                     </SelectContent>
