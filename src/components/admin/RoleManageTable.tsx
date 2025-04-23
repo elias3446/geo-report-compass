@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -129,10 +130,12 @@ const RoleManageTable: React.FC = () => {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="font-bold text-lg">Roles de Usuario</h3>
-        <Button onClick={() => setIsDialogOpen(true)}>
-          <Plus className="h-4 w-4 mr-2" />
+      <div className="flex items-center justify-end mb-4">
+        <Button 
+          onClick={() => setIsDialogOpen(true)}
+          className="flex items-center"
+        >
+          <Plus className="mr-2 h-4 w-4" />
           Nuevo Rol
         </Button>
       </div>

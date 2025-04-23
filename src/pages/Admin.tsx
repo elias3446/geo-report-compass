@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import AppLayout from '@/components/layout/AppLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -462,28 +461,33 @@ const Admin = () => {
         </TabsContent>
         
         <TabsContent value="categories" className="space-y-4">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-semibold">Categorías de Reportes</h2>
-            <Button 
-              onClick={() => {
-                setEditingCategory(undefined);
-                setCategoryFormOpen(true);
-              }}
-            >
-              <PlusCircle className="mr-2 h-4 w-4" />
-              Añadir Categoría
-            </Button>
+          <div className="border rounded-lg p-6 bg-white">
+            <div className="flex justify-between items-center mb-6">
+              <div>
+                <h2 className="text-2xl font-bold">Gestión de Categorías</h2>
+                <p className="text-gray-500">Administra las categorías del sistema</p>
+              </div>
+              <Button 
+                onClick={() => {
+                  setEditingCategory(undefined);
+                  setCategoryFormOpen(true);
+                }}
+              >
+                <PlusCircle className="mr-2 h-4 w-4" />
+                Nueva Categoría
+              </Button>
+            </div>
+            
+            <ReportCategoryTable 
+              categories={categories.map(cat => ({
+                ...cat,
+                reports: Math.floor(Math.random() * 20)
+              }))}
+              onEdit={handleEditCategory}
+              onDelete={handleDeleteCategory}
+              onToggleActive={handleToggleCategoryActive}
+            />
           </div>
-          
-          <ReportCategoryTable 
-            categories={categories.map(cat => ({
-              ...cat,
-              reports: Math.floor(Math.random() * 20) // Ejemplo: número aleatorio de reportes asignados
-            }))}
-            onEdit={handleEditCategory}
-            onDelete={handleDeleteCategory}
-            onToggleActive={handleToggleCategoryActive}
-          />
 
           {categoryFormOpen && (
             <CategoryForm 
