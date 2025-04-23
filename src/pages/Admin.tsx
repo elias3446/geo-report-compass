@@ -13,6 +13,9 @@ import CategoryList from '@/components/admin/CategoryList';
 import CategoryForm from '@/components/admin/CategoryForm';
 import SettingsForm from '@/components/admin/SettingsForm';
 import ReportsTable from '@/components/admin/ReportsTable';
+import ReportCategoryTable from '@/components/admin/ReportCategoryTable';
+import RoleManageTable from '@/components/admin/RoleManageTable';
+import StatusManageTable from '@/components/admin/StatusManageTable';
 import { User, Category, SystemSetting, Report, UserRole } from '@/types/admin';
 import { 
   getUsers, createUser, updateUser,
@@ -318,6 +321,8 @@ const Admin = () => {
           <TabsTrigger value="users">Usuarios</TabsTrigger>
           <TabsTrigger value="reports">Reportes</TabsTrigger>
           <TabsTrigger value="categories">Categorías</TabsTrigger>
+          <TabsTrigger value="roles">Roles</TabsTrigger>
+          <TabsTrigger value="states">Estados</TabsTrigger>
           <TabsTrigger value="settings">Configuración</TabsTrigger>
         </TabsList>
         
@@ -470,8 +475,11 @@ const Admin = () => {
             </Button>
           </div>
           
-          <CategoryList 
-            categories={categories}
+          <ReportCategoryTable 
+            categories={categories.map(cat => ({
+              ...cat,
+              reports: Math.floor(Math.random() * 20) // Ejemplo: número aleatorio de reportes asignados
+            }))}
             onEdit={handleEditCategory}
             onDelete={handleDeleteCategory}
             onToggleActive={handleToggleCategoryActive}
@@ -485,6 +493,38 @@ const Admin = () => {
               initialData={editingCategory}
             />
           )}
+        </TabsContent>
+        
+        <TabsContent value="roles" className="space-y-4">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <div>
+                <CardTitle>Gestión de Roles</CardTitle>
+                <CardDescription>
+                  Administra los roles y permisos del sistema
+                </CardDescription>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <RoleManageTable />
+            </CardContent>
+          </Card>
+        </TabsContent>
+        
+        <TabsContent value="states" className="space-y-4">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <div>
+                <CardTitle>Estados de Reporte</CardTitle>
+                <CardDescription>
+                  Administra los estados posibles de los reportes en el sistema
+                </CardDescription>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <StatusManageTable />
+            </CardContent>
+          </Card>
         </TabsContent>
         
         <TabsContent value="settings" className="space-y-4">

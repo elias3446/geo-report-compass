@@ -11,6 +11,7 @@ import {
   TableBody, 
   TableCell 
 } from '@/components/ui/table';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
 import { EditIcon, Trash2Icon, MoreHorizontalIcon, Eye } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -69,84 +70,86 @@ const UserTable: React.FC<UserTableProps> = ({
 
   return (
     <div className="rounded-md border">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[50px]"></TableHead>
-            <TableHead>Usuario</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead>Rol</TableHead>
-            <TableHead>Estado</TableHead>
-            <TableHead>Último Acceso</TableHead>
-            <TableHead className="text-right">Acciones</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {filteredUsers.map((user) => (
-            <TableRow key={user.id}>
-              <TableCell>
-                <Avatar className="h-8 w-8">
-                  <AvatarImage src={user.avatar} alt={user.name} />
-                  <AvatarFallback>
-                    {user.name.split(' ').map(name => name[0]).join('')}
-                  </AvatarFallback>
-                </Avatar>
-              </TableCell>
-              <TableCell className="font-medium">
-                <Link to={`/users/${user.id}`} className="hover:underline text-blue-600">
-                  {user.name}
-                </Link>
-              </TableCell>
-              <TableCell>{user.email}</TableCell>
-              <TableCell>
-                <Badge variant="outline" className={roleColors[user.role]}>
-                  {user.role === 'admin' && 'Administrador'}
-                  {user.role === 'supervisor' && 'Supervisor'}
-                  {user.role === 'mobile' && 'Usuario Móvil'}
-                  {user.role === 'viewer' && 'Visualizador'}
-                </Badge>
-              </TableCell>
-              <TableCell>
-                <Badge variant={user.active ? "success" : "destructive"}>
-                  {user.active ? 'Activo' : 'Inactivo'}
-                </Badge>
-              </TableCell>
-              <TableCell>
-                {user.lastLogin 
-                  ? format(user.lastLogin, 'dd/MM/yyyy HH:mm')
-                  : 'Nunca'}
-              </TableCell>
-              <TableCell className="text-right">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon">
-                      <MoreHorizontalIcon className="h-4 w-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem asChild>
-                      <Link to={`/users/${user.id}`}>
-                        <Eye className="mr-2 h-4 w-4" />
-                        Ver Detalles
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => onEdit(user)}>
-                      <EditIcon className="mr-2 h-4 w-4" />
-                      Editar
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => handleDelete(user)} className="text-destructive">
-                      <Trash2Icon className="mr-2 h-4 w-4" />
-                      Eliminar
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </TableCell>
+      <ScrollArea className="h-[500px]">
+        <Table>
+          <TableHeader className="sticky top-0 bg-background z-10">
+            <TableRow>
+              <TableHead className="w-[50px]"></TableHead>
+              <TableHead>Usuario</TableHead>
+              <TableHead>Email</TableHead>
+              <TableHead>Rol</TableHead>
+              <TableHead>Estado</TableHead>
+              <TableHead>Último Acceso</TableHead>
+              <TableHead className="text-right">Acciones</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {filteredUsers.map((user) => (
+              <TableRow key={user.id}>
+                <TableCell>
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage src={user.avatar} alt={user.name} />
+                    <AvatarFallback>
+                      {user.name.split(' ').map(name => name[0]).join('')}
+                    </AvatarFallback>
+                  </Avatar>
+                </TableCell>
+                <TableCell className="font-medium">
+                  <Link to={`/users/${user.id}`} className="hover:underline text-blue-600">
+                    {user.name}
+                  </Link>
+                </TableCell>
+                <TableCell>{user.email}</TableCell>
+                <TableCell>
+                  <Badge variant="outline" className={roleColors[user.role]}>
+                    {user.role === 'admin' && 'Administrador'}
+                    {user.role === 'supervisor' && 'Supervisor'}
+                    {user.role === 'mobile' && 'Usuario Móvil'}
+                    {user.role === 'viewer' && 'Visualizador'}
+                  </Badge>
+                </TableCell>
+                <TableCell>
+                  <Badge variant={user.active ? "success" : "destructive"}>
+                    {user.active ? 'Activo' : 'Inactivo'}
+                  </Badge>
+                </TableCell>
+                <TableCell>
+                  {user.lastLogin 
+                    ? format(user.lastLogin, 'dd/MM/yyyy HH:mm')
+                    : 'Nunca'}
+                </TableCell>
+                <TableCell className="text-right">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="icon">
+                        <MoreHorizontalIcon className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem asChild>
+                        <Link to={`/users/${user.id}`}>
+                          <Eye className="mr-2 h-4 w-4" />
+                          Ver Detalles
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => onEdit(user)}>
+                        <EditIcon className="mr-2 h-4 w-4" />
+                        Editar
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleDelete(user)} className="text-destructive">
+                        <Trash2Icon className="mr-2 h-4 w-4" />
+                        Eliminar
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </ScrollArea>
     </div>
   );
 };
