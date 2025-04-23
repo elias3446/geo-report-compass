@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
@@ -6,40 +5,20 @@ import { Badge } from "@/components/ui/badge";
 // Puedes ajustar nombres o descripciones según tu flujo de negocio.
 const reportStates = [
   {
-    id: "draft",
-    nombre: "Borrador",
-    descripcion: "Reporte guardado pero no enviado."
+    id: "Open",
+    nombre: "Open",
+    descripcion: "Report is created and pending attention."
   },
   {
-    id: "submitted",
-    nombre: "Enviado",
-    descripcion: "Reporte creado y enviado, pendiente de aprobación."
+    id: "In Progress",
+    nombre: "In Progress",
+    descripcion: "Report is currently being worked on."
   },
   {
-    id: "approved",
-    nombre: "Aprobado",
-    descripcion: "Reporte revisado y aprobado por un supervisor."
-  },
-  {
-    id: "rejected",
-    nombre: "Rechazado",
-    descripcion: "Reporte rechazado, posiblemente con observaciones."
-  },
-  {
-    id: "pending",
-    nombre: "Pendiente",
-    descripcion: "Reporte recibido, pendiente de revisión."
-  },
-  {
-    id: "in-progress",
-    nombre: "En Progreso",
-    descripcion: "Reporte en curso de solución."
-  },
-  {
-    id: "resolved",
-    nombre: "Resuelto",
-    descripcion: "La incidencia del reporte ha sido solucionada."
-  },
+    id: "Resolved",
+    nombre: "Resolved",
+    descripcion: "The reported issue has been resolved."
+  }
 ];
 
 const ReportStatusTable: React.FC = () => (

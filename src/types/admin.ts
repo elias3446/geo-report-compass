@@ -1,4 +1,3 @@
-
 export interface User {
   id: string;
   name: string;
@@ -47,7 +46,7 @@ export interface Report {
   updatedAt?: Date;
 }
 
-export type ReportStatus = 'draft' | 'submitted' | 'approved' | 'rejected' | 'pending' | 'in-progress' | 'resolved';
+export type ReportStatus = 'Open' | 'In Progress' | 'Resolved';
 
 export interface Location {
   name: string;

@@ -136,9 +136,9 @@ export const getUsersStats = () => {
 export const getReportsStats = () => {
   return {
     total: mockReports.length,
-    pending: mockReports.filter(r => r.status === 'pending').length,
-    inProgress: mockReports.filter(r => r.status === 'in-progress').length,
-    resolved: mockReports.filter(r => r.status === 'resolved').length,
+    open: mockReports.filter(r => r.status === 'Open').length,
+    inProgress: mockReports.filter(r => r.status === 'In Progress').length,
+    resolved: mockReports.filter(r => r.status === 'Resolved').length,
     highPriority: mockReports.filter(r => r.priority === 'high').length
   };
 };

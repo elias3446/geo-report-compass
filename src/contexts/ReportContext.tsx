@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
-export interface GeoReport {
+export interface Report {
   id: string;
   title: string;
   description: string;
@@ -10,7 +10,7 @@ export interface GeoReport {
     name: string;
   };
   date: string;
-  status: 'draft' | 'submitted' | 'approved' | 'rejected';
+  status: 'Open' | 'In Progress' | 'Resolved';
   category: string;
   tags: string[];
   createdAt: string;
@@ -18,20 +18,21 @@ export interface GeoReport {
 }
 
 interface ReportContextType {
-  reports: GeoReport[];
-  addReport: (report: Omit<GeoReport, 'id' | 'createdAt'>) => void;
-  updateReport: (id: string, report: Partial<GeoReport>) => void;
+  reports: Report[];
+  addReport: (report: Omit<Report, 'id' | 'createdAt'>) => void;
+  updateReport: (id: string, report: Partial<Report>) => void;
   deleteReport: (id: string) => void;
-  getReportById: (id: string) => GeoReport | undefined;
+  getReportById: (id: string) => Report | undefined;
 }
 
 const ReportContext = createContext<ReportContextType | undefined>(undefined);
 
-const initialReports: GeoReport[] = [
+const mockReports: Report[] = [
   {
     id: '1',
-    title: 'Coastal Erosion Assessment',
-    description: 'Annual assessment of coastline changes in the Pacific Northwest region.',
+    title: 'Broken Street Light',
+    description: 'Street light not working on Main Street',
+    status: 'Open',
     location: {
       lat: 47.6062,
       lng: -122.3321,
@@ -39,15 +40,15 @@ const initialReports: GeoReport[] = [
     },
     date: '2025-03-15T10:30:00Z',
     createdAt: '2025-03-15T10:30:00Z',
-    status: 'approved',
     category: 'Environmental',
-    tags: ['coastal', 'erosion', 'annual'],
+    tags: ['street light', 'Main Street'],
     assignedTo: 'John Doe'
   },
   {
     id: '2',
-    title: 'Urban Development Impact',
-    description: 'Analysis of urban sprawl and its environmental impact on local watersheds.',
+    title: 'Pothole Report',
+    description: 'Large pothole on Oak Avenue',
+    status: 'In Progress',
     location: {
       lat: 37.7749,
       lng: -122.4194,
@@ -55,15 +56,15 @@ const initialReports: GeoReport[] = [
     },
     date: '2025-02-28T15:45:00Z',
     createdAt: '2025-02-28T15:45:00Z',
-    status: 'submitted',
     category: 'Urban Planning',
-    tags: ['urban', 'development', 'watershed'],
+    tags: ['pothole', 'Oak Avenue'],
     assignedTo: 'Jane Smith'
   },
   {
     id: '3',
-    title: 'Forest Fire Risk Assessment',
-    description: 'Quarterly evaluation of forest fire risks based on climate and vegetation data.',
+    title: 'Garbage Collection',
+    description: 'Missed garbage collection on Pine Street',
+    status: 'Resolved',
     location: {
       lat: 39.5501,
       lng: -105.7821,
@@ -71,9 +72,8 @@ const initialReports: GeoReport[] = [
     },
     date: '2025-04-01T08:20:00Z',
     createdAt: '2025-04-01T08:20:00Z',
-    status: 'draft',
     category: 'Disaster Management',
-    tags: ['forest', 'fire', 'risk', 'climate'],
+    tags: ['garbage', 'Pine Street'],
     assignedTo: 'Alice Johnson'
   },
   {
@@ -87,7 +87,7 @@ const initialReports: GeoReport[] = [
     },
     date: '2025-01-15T12:15:00Z',
     createdAt: '2025-01-15T12:15:00Z',
-    status: 'approved',
+    status: 'Open',
     category: 'Agriculture',
     tags: ['soil', 'agriculture', 'contamination'],
     assignedTo: 'Bob Brown'
@@ -103,7 +103,7 @@ const initialReports: GeoReport[] = [
     },
     date: '2025-03-10T09:15:00Z',
     createdAt: '2025-03-10T09:15:00Z',
-    status: 'submitted',
+    status: 'In Progress',
     category: 'Climate Research',
     tags: ['glacier', 'climate-change', 'mountains'],
     assignedTo: 'Charlie Davis'
@@ -119,7 +119,7 @@ const initialReports: GeoReport[] = [
     },
     date: '2025-02-05T14:20:00Z',
     createdAt: '2025-02-05T14:20:00Z',
-    status: 'approved',
+    status: 'Resolved',
     category: 'Water Quality',
     tags: ['pollution', 'river', 'industrial', 'contaminants'],
     assignedTo: 'David Wilson'
@@ -135,7 +135,7 @@ const initialReports: GeoReport[] = [
     },
     date: '2025-03-25T11:00:00Z',
     createdAt: '2025-03-25T11:00:00Z',
-    status: 'submitted',
+    status: 'Open',
     category: 'Marine Biology',
     tags: ['coral', 'ocean', 'temperature', 'climate'],
     assignedTo: 'Eve Brown'
@@ -151,7 +151,7 @@ const initialReports: GeoReport[] = [
     },
     date: '2025-01-30T10:45:00Z',
     createdAt: '2025-01-30T10:45:00Z',
-    status: 'rejected',
+    status: 'Resolved',
     category: 'Forest Conservation',
     tags: ['deforestation', 'satellite', 'tropical', 'amazon'],
     assignedTo: 'Frank Smith'
@@ -167,7 +167,7 @@ const initialReports: GeoReport[] = [
     },
     date: '2025-04-05T16:30:00Z',
     createdAt: '2025-04-05T16:30:00Z',
-    status: 'approved',
+    status: 'Open',
     category: 'Air Quality',
     tags: ['pollution', 'urban', 'particulate', 'smog'],
     assignedTo: 'Grace Johnson'
@@ -183,7 +183,7 @@ const initialReports: GeoReport[] = [
     },
     date: '2025-02-20T13:15:00Z',
     createdAt: '2025-02-20T13:15:00Z',
-    status: 'draft',
+    status: 'In Progress',
     category: 'Ecosystem Conservation',
     tags: ['wetland', 'biodiversity', 'habitat', 'conservation'],
     assignedTo: 'Hannah Davis'
@@ -199,7 +199,7 @@ const initialReports: GeoReport[] = [
     },
     date: '2025-03-05T11:20:00Z',
     createdAt: '2025-03-05T11:20:00Z',
-    status: 'submitted',
+    status: 'Resolved',
     category: 'Water Resources',
     tags: ['groundwater', 'aquifer', 'agriculture', 'drought'],
     assignedTo: 'Ivy Brown'
@@ -215,7 +215,7 @@ const initialReports: GeoReport[] = [
     },
     date: '2025-01-25T09:45:00Z',
     createdAt: '2025-01-25T09:45:00Z',
-    status: 'approved',
+    status: 'Open',
     category: 'Renewable Energy',
     tags: ['wind', 'birds', 'migration', 'offshore'],
     assignedTo: 'Jack Wilson'
@@ -231,7 +231,7 @@ const initialReports: GeoReport[] = [
     },
     date: '2025-04-10T14:50:00Z',
     createdAt: '2025-04-10T14:50:00Z',
-    status: 'draft',
+    status: 'In Progress',
     category: 'Soil Conservation',
     tags: ['erosion', 'agriculture', 'rainfall', 'topsoil'],
     assignedTo: 'Olivia Davis'
@@ -247,7 +247,7 @@ const initialReports: GeoReport[] = [
     },
     date: '2025-02-12T10:30:00Z',
     createdAt: '2025-02-12T10:30:00Z',
-    status: 'submitted',
+    status: 'Resolved',
     category: 'Invasive Species',
     tags: ['invasive', 'aquatic', 'lakes', 'ecosystem'],
     assignedTo: 'Paul Brown'
@@ -263,7 +263,7 @@ const initialReports: GeoReport[] = [
     },
     date: '2025-03-20T09:40:00Z',
     createdAt: '2025-03-20T09:40:00Z',
-    status: 'approved',
+    status: 'Open',
     category: 'Hydrology',
     tags: ['snowpack', 'mountains', 'water-supply', 'climate'],
     assignedTo: 'Quinn Davis'
@@ -271,11 +271,11 @@ const initialReports: GeoReport[] = [
 ];
 
 export const ReportProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [reports, setReports] = useState<GeoReport[]>(initialReports);
+  const [reports, setReports] = useState<Report[]>(mockReports);
 
-  const addReport = (reportData: Omit<GeoReport, 'id' | 'createdAt'>) => {
+  const addReport = (reportData: Omit<Report, 'id' | 'createdAt'>) => {
     const now = new Date().toISOString();
-    const newReport: GeoReport = {
+    const newReport: Report = {
       ...reportData,
       id: Date.now().toString(),
       createdAt: now,
@@ -284,7 +284,7 @@ export const ReportProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     setReports(prev => [...prev, newReport]);
   };
 
-  const updateReport = (id: string, reportData: Partial<GeoReport>) => {
+  const updateReport = (id: string, reportData: Partial<Report>) => {
     setReports(prev => 
       prev.map(report => 
         report.id === id ? { ...report, ...reportData } : report

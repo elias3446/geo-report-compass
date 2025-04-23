@@ -22,12 +22,11 @@ interface Status {
 }
 
 const StatusManageTable: React.FC = () => {
-  const [statuses, setStatuses] = useState<Status[]>([
-    { id: "draft", name: "Borrador", description: "Reporte guardado pero no enviado" },
-    { id: "submitted", name: "Enviado", description: "Reporte enviado, pendiente de aprobación" },
-    { id: "in-progress", name: "En Progreso", description: "Reporte en proceso de atención" },
-    { id: "resolved", name: "Resuelto", description: "Reporte completado" }
-  ]);
+  const statuses = [
+    { id: "Open", name: "Open", description: "Report is created and pending attention" },
+    { id: "In Progress", name: "In Progress", description: "Report is currently being worked on" },
+    { id: "Resolved", name: "Resolved", description: "The reported issue has been resolved" }
+  ];
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingStatus, setEditingStatus] = useState<Status | null>(null);
@@ -36,28 +35,19 @@ const StatusManageTable: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (editingStatus) {
-      setStatuses(statuses.map(status => 
-        status.id === editingStatus.id ? { ...status, ...formData } : status
-      ));
-      toast.success("Estado actualizado correctamente");
+      // ... existing code ...
     } else {
       const newStatus: Status = {
         id: `status_${uuidv4().split('-')[0]}`,
         ...formData
       };
-      setStatuses([...statuses, newStatus]);
-      toast.success("Estado creado correctamente");
+      // ... existing code ...
     }
     handleCloseDialog();
   };
 
   const handleDelete = (statusId: string) => {
-    if (statusId === "draft" || statusId === "submitted") {
-      toast.error("No se puede eliminar un estado del sistema");
-      return;
-    }
-    setStatuses(statuses.filter(status => status.id !== statusId));
-    toast.success("Estado eliminado correctamente");
+    // ... existing code ...
   };
 
   const handleEdit = (status: Status) => {
@@ -70,6 +60,10 @@ const StatusManageTable: React.FC = () => {
     setIsDialogOpen(false);
     setEditingStatus(null);
     setFormData({ name: "", description: "" });
+  };
+
+  const handleStatusChange = (statusId: string, newStatus: string) => {
+    // ... existing code ...
   };
 
   return (
@@ -120,7 +114,6 @@ const StatusManageTable: React.FC = () => {
                     size="icon"
                     className="text-destructive"
                     onClick={() => handleDelete(status.id)}
-                    disabled={status.id === "draft" || status.id === "submitted"}
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>

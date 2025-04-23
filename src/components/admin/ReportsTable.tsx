@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
@@ -44,23 +43,15 @@ interface ReportsTableProps {
 }
 
 const statusColors = {
-  'draft': 'bg-yellow-100 text-yellow-800 border-yellow-200',
-  'submitted': 'bg-blue-100 text-blue-800 border-blue-200',
-  'approved': 'bg-green-100 text-green-800 border-green-200',
-  'rejected': 'bg-red-100 text-red-800 border-red-200',
   'Open': 'bg-yellow-100 text-yellow-800 border-yellow-200',
   'In Progress': 'bg-blue-100 text-blue-800 border-blue-200',
   'Resolved': 'bg-green-100 text-green-800 border-green-200'
 };
 
 const statusLabels = {
-  'draft': 'Borrador',
-  'submitted': 'Enviado',
-  'approved': 'Aprobado',
-  'rejected': 'Rechazado',
-  'Open': 'Abierto',
-  'In Progress': 'En Progreso',
-  'Resolved': 'Resuelto'
+  'Open': 'Open',
+  'In Progress': 'In Progress',
+  'Resolved': 'Resolved'
 };
 
 const ReportsTable: React.FC<ReportsTableProps> = ({ 
