@@ -1,13 +1,14 @@
+
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Category } from '../../types/admin';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
-import { Trash2Icon, EditIcon, ToggleLeftIcon, ToggleRightIcon, Eye } from 'lucide-react';
+import { Trash2Icon, EditIcon, ToggleLeftIcon, ToggleRightIcon, EyeIcon } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Icons } from '../ui/icons';
 import { registerAdminActivity } from '@/services/activityService';
-import { Link } from 'react-router-dom';
 
 interface CategoryListProps {
   categories: Category[];
@@ -64,7 +65,7 @@ const CategoryList: React.FC<CategoryListProps> = ({
 
   return <ScrollArea className="h-[600px] w-full">
       <div className="flex flex-col gap-4 p-4">
-        {categories.map(category => <Card key={category.id} className="w-full">
+        {categories.map(category => <Card key={category.id}>
             <div className="h-2" style={{
           backgroundColor: category.color
         }} />
@@ -76,7 +77,10 @@ const CategoryList: React.FC<CategoryListProps> = ({
               }}>
                     {React.createElement(Icons[category.icon] || Icons.category)}
                   </span>
-                  <Link to={`/categories/${category.id}`} className="hover:underline text-blue-600 truncate">
+                  <Link 
+                    to={`/categories/${category.id}`} 
+                    className="hover:underline text-blue-600 truncate"
+                  >
                     {category.name}
                   </Link>
                 </CardTitle>
@@ -90,7 +94,7 @@ const CategoryList: React.FC<CategoryListProps> = ({
               <div className="flex justify-end space-x-2">
                 <Button variant="ghost" size="sm" asChild>
                   <Link to={`/categories/${category.id}`} className="flex items-center px-3 py-2 hover:bg-accent rounded-md transition-colors">
-                    <Eye className="mr-2 h-4 w-4" />
+                    <EyeIcon className="mr-2 h-4 w-4" />
                     Ver
                   </Link>
                 </Button>

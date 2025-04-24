@@ -1,6 +1,7 @@
 import { User, Category, SystemSetting, Report, UserRole, MobileUserType, ReportStatus } from '../types/admin';
 import { mockUsers, mockCategories, mockSettings, mockReports } from './mockData';
 import { UserFormData } from '@/hooks/useUserForm';
+import { getAllCategories } from './categoryService';
 
 // User management functions
 export const getUsers = (): User[] => {
@@ -24,7 +25,6 @@ export const getUserById = (id: string): User | undefined => {
   return mockUsers.find(user => user.id === id);
 };
 
-// This would communicate with a backend in a real implementation
 export const createUser = (userData: UserFormData): User => {
   const newUser: User = {
     id: `user-${mockUsers.length + 1}`,
@@ -53,11 +53,12 @@ export const updateUser = (id: string, userData: Partial<UserFormData>): User | 
 
 // Categories management functions
 export const getCategories = (): Category[] => {
-  return [...mockCategories];
+  return getAllCategories();
 };
 
 export const getCategoryById = (id: string): Category | undefined => {
-  return mockCategories.find(category => category.id === id);
+  const allCategories = getAllCategories();
+  return allCategories.find(category => category.id === id);
 };
 
 export const createCategory = (categoryData: Omit<Category, 'id' | 'createdAt'>): Category => {
@@ -143,7 +144,13 @@ export const getReportsStats = () => {
   };
 };
 
-// Añadimos la función para obtener reportes por categoría
+// Reports by category
 export const getReportsByCategoryId = (categoryId: string): Report[] => {
-  return mockReports.filter(report => report.category === categoryId);
+  const category = getCategoryById(categoryId);
+  if (!category) return [];
+  
+  return mockReports.filter(report => 
+    report.category === category.id || 
+    report.category === category.name
+  );
 };

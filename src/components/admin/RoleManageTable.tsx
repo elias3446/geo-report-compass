@@ -1,12 +1,13 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Edit, Plus, Trash2 } from "lucide-react";
-import { EditIcon, Trash2Icon, MoreHorizontalIcon, Eye } from 'lucide-react';
+import { Edit, Plus, Trash2, Eye } from "lucide-react";
+import { Trash2Icon } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -16,6 +17,7 @@ import {
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { v4 as uuidv4 } from 'uuid';
+import { availablePermissions } from "@/pages/RoleDetail"; // Correct import path
 
 interface Role {
   id: string;
@@ -24,23 +26,8 @@ interface Role {
   permissions: string[];
 }
 
-interface Permission {
-  id: string;
-  label: string;
-  description: string;
-}
-
-const availablePermissions: Permission[] = [
-  { id: "users_view", label: "Ver usuarios", description: "Permite ver la lista de usuarios" },
-  { id: "users_manage", label: "Gestionar usuarios", description: "Permite crear, editar y eliminar usuarios" },
-  { id: "reports_view", label: "Ver reportes", description: "Permite ver todos los reportes" },
-  { id: "reports_manage", label: "Gestionar reportes", description: "Permite editar y actualizar reportes" },
-  { id: "categories_manage", label: "Gestionar categorías", description: "Permite administrar las categorías" },
-  { id: "settings_view", label: "Ver configuración", description: "Permite ver la configuración del sistema" },
-  { id: "settings_manage", label: "Gestionar configuración", description: "Permite modificar la configuración" }
-];
-
 const RoleManageTable: React.FC = () => {
+  const navigate = useNavigate();
   const [roles, setRoles] = useState<Role[]>([
     { 
       id: "admin", 
@@ -127,6 +114,11 @@ const RoleManageTable: React.FC = () => {
         : [...prev.permissions, permissionId]
     }));
   };
+  
+  const handleViewRole = (roleId: string) => {
+    console.log("Navigating to role detail:", roleId);
+    navigate(`/admin/roles/${roleId}`);
+  };
 
   return (
     <div>
@@ -157,7 +149,11 @@ const RoleManageTable: React.FC = () => {
           </TableHeader>
           <TableBody>
             {roles.map(role => (
-              <TableRow key={role.id}>
+              <TableRow 
+                key={role.id}
+                className="cursor-pointer"
+                onClick={() => handleViewRole(role.id)}
+              >
                 <TableCell>
                   <Badge variant="outline">{role.id}</Badge>
                 </TableCell>
@@ -177,11 +173,24 @@ const RoleManageTable: React.FC = () => {
                   </div>
                 </TableCell>
                 <TableCell className="text-right">
-                <div className="flex justify-end gap-2">
+                <div className="flex justify-end gap-2" onClick={(e) => e.stopPropagation()}>
                   <Button
                     variant="ghost"
                     size="icon"
-                    onClick={() => handleEdit(role)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleViewRole(role.id);
+                    }}
+                  >
+                    <Eye className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleEdit(role);
+                    }}
                     className="mr-2"
                   >
                     <Edit className="h-4 w-4" />
@@ -190,7 +199,10 @@ const RoleManageTable: React.FC = () => {
                     variant="ghost"
                     size="icon"
                     className="text-destructive"
-                    onClick={() => handleDelete(role.id)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDelete(role.id);
+                    }}
                     disabled={role.id === "admin"}
                   >
                     <Trash2Icon className="h-4 w-4" />

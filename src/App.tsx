@@ -1,9 +1,10 @@
+
+import React, { useState } from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useState } from "react";
 import { ReportProvider } from "./contexts/ReportContext";
 import { TimeFilterProvider } from "./context/TimeFilterContext";
 import { UserProvider } from "./contexts/UserContext";
@@ -21,6 +22,7 @@ import NotFound from "./pages/NotFound";
 import Dashboard from "./pages/Dashboard";
 import UserDetail from "./pages/UserDetail";
 import CategoryDetail from "./pages/CategoryDetail";
+import RoleDetail from "./pages/RoleDetail";
 
 const App = () => {
   const [queryClient] = useState(() => new QueryClient());
@@ -48,6 +50,7 @@ const App = () => {
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/users/:id" element={<UserDetail />} />
                     <Route path="/categories/:id" element={<CategoryDetail />} />
+                    <Route path="/admin/roles/:id" element={<RoleDetail />} />
                     <Route path="*" element={<NotFound />} />
                   </Routes>
                 </TimeFilterProvider>
